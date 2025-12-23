@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Wonderland Toystore</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* Page-specific styles for the registration form */
+        .page-container {
+            max-width: 800px; /* Limits width so it doesn't stretch too far */
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .breadcrumb {
+            color: #888;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .breadcrumb a {
+            color: #888;
+            text-decoration: none;
+        }
+
+        h1.page-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 25px; /* Rounded pill shape */
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #333;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .checkbox-group input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-submit {
+            background-color: white;
+            color: #000;
+            border: 1px solid #000;
+            padding: 12px 40px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .btn-submit:hover {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .required { color: red; }
+    </style>
+</head>
+<body>
+
+    <header class="header-main">
+        <a href="index.html" class="logo">
+            <img src="assets/img/logo1.png" alt="Logo" style="height: 60px;">
+        </a> 
+        <div class="search-container">
+            <form class="search-form" action="search" method="GET">
+                <input type="text" class="search-input" placeholder="Search for magic...">
+                <button type="button" class="search-btn">🔍</button>
+            </form>
+        </div>
+        <div class="user-actions">
+            <a href="index.html" id="loginBtn">Hello, Sign In 👤</a>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> &nbsp; › &nbsp; Create Account
+        </div>
+
+        <h1 class="page-title">Create Account</h1>
+        <p class="subtitle">Please register below to create an account</p>
+
+   <form action="/register" method="POST">
+            <div class="form-group">
+    <label>Choose a Username <span class="required">*</span></label>
+    <input type="text" name="username" required>
+</div>
+<div class="checkbox-group">
+        <input type="checkbox" id="terms" name="terms" required>
+        <label for="terms">I agree to the Terms & Conditions <span class="required">*</span></label>
+    </div>
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" name="firstname">
+            </div>
+
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" name="lastname">
+            </div>
+
+            <div class="form-group">
+                <label>Your Email Address <span class="required">*</span></label>
+                <input type="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Your Password <span class="required">*</span></label>
+                <input type="password" name="password" required>
+            </div>
+<div class="checkbox-group">
+        <input type="checkbox" id="subscribe" name="subscribe" value="true">
+        <label for="subscribe">Subscribe to the Wonderland Magic Mail (Newsletter) ✨</label>
+    </div>
+
+            <button type="submit" class="btn-submit">Create An Account</button>
+        </form>
+    </div>
+
+</body>
+</html>

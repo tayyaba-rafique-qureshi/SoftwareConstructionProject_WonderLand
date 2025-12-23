@@ -1,0 +1,109 @@
+/* assets/css/product-style.css */
+
+/* --- 1. PRODUCT IMAGE (STICKY) --- */
+.product-image-box {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    text-align: center;
+    
+    /* STICKY LOGIC */
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 130px; /* Height of header (85px) + some buffer space */
+    z-index: 10;
+    
+    /* Layout */
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.product-image-box img {
+    max-height: 450px;
+    max-width: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+/* Subtle zoom on image hover */
+.product-image-box:hover img {
+    transform: scale(1.05);
+}
+
+/* --- 2. DESCRIPTION TEXT & IMAGES --- */
+/* Fix for DB images inside description */
+#prodDesc img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 15px;
+    display: block;
+}
+
+#prodDesc p {
+    margin-bottom: 1rem;
+    line-height: 1.8;
+    color: #555;
+    font-size: 1.1rem;
+}
+
+/* --- 3. ADD TO CART BUTTON (ANIMATED) --- */
+#addToCartBtn {
+    background-color: var(--brand-orange); /* Match Shop Theme */
+    color: var(--brand-red);
+    font-weight: 700;
+    border: 3px solid var(--brand-orange);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy Animation */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover State: Scale up and lift */
+#addToCartBtn:hover {
+    background-color: var(--brand-orange);
+    color: var(--brand-red);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(220, 53, 69, 0.3); /* Red glow */
+    border-color: var(--brand-red);
+}
+
+/* Click State: Press down */
+#addToCartBtn:active {
+    transform: translateY(2px) scale(0.95);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Sold Out Button Styling */
+#outOfStockBtn {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: none;
+    cursor: not-allowed;
+}
+
+/* --- 4. RELATED PRODUCTS GRID --- */
+#relatedGrid .card {
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+#relatedGrid .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+    border-color: var(--brand-peach);
+}
+
+#relatedGrid .card-img-top {
+    transition: transform 0.3s ease;
+}
+
+#relatedGrid .card:hover .card-img-top {
+    transform: scale(1.1);
+}

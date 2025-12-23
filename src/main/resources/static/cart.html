@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cart | Wonderland</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/shop-style.css">
+    <link rel="stylesheet" href="assets/css/cart-style.css">
+</head>
+<body>
+
+   <header class="header-main">
+        <a href="index.html" class="logo">
+            <img src="assets/img/logo2.png" alt="Logo" style="height: 85px;"> 
+        </a>
+        <div class="search-container">
+            <form class="search-form" action="/search" method="GET">
+                <input type="text" class="search-input" name="query" placeholder="Search for magic...">
+                <button type="submit" class="search-btn">🔍</button>
+            </form>
+        </div>
+
+       <div class="user-actions">
+            <a href="#" id="loginBtn">Hello, Sign In 👤</a>
+            <a href="#" id="accountBtn" style="display: none;">Hello, <span id="displayUsername">Account</span> 👤</a>
+            <a href="cart.html" class="position-relative">
+                🛒 Cart
+                <span id="cartCount" class="badge rounded-pill bg-danger" style="display: none;">0</span>
+            </a>
+        </div>
+
+        <div id="accountSidebar" class="side-drawer">
+    <div class="drawer-header">
+        <h2>My Account Details</h2>
+        <span class="close-btn" onclick="closeAccount()">&times;</span>
+    </div>
+    <div class="account-info" style="padding: 20px;">
+        <div class="user-profile-header" style="text-align:center; margin-bottom:20px;">
+            <img src="assets/img/logo2.png" style="height:60px; border-radius:50%; background:#eee;">
+            <h3 id="acc-name">User Name</h3>
+            <p id="acc-email" class="text-muted">user@example.com</p>
+        </div>
+        
+        <ul class="account-menu-list" style="list-style:none; padding:0;">
+            <li style="padding:15px 0; border-bottom:1px solid #eee;">
+                      <a href="#" onclick="openChangePassModal()" style="text-decoration:none; color:inherit;">🔐 Change Password</a>
+            </li>
+            <li style="padding:15px 0; border-bottom:1px solid #eee;">
+                <a href="/logout" style="text-decoration:none; color: var(--brand-red);">🚪 Logout</a>
+            </li>
+        </ul>
+    </div>
+</div>
+    </header>
+
+    <nav class="nav-bar">
+    <ul class="nav-list">
+        <li class="nav-item dropdown">
+            <a href="#" class="dropbtn">Shop by Category ▾</a>
+            <div class="dropdown-content">
+                <a href="shop.html?category=Action Toys %26 Figures">Action Toys & Figures</a>
+                <a href="shop.html?category=Lego %26 Bricks">Lego & Bricks</a>
+                <a href="shop.html?category=Plush %26 Stuffed Toys">Plush & Stuffed Toys</a>
+                <a href="shop.html?category=Video Games">Video Games & Consoles</a>
+                <a href="shop.html?category=Toys for Her">Toys for Her</a>
+                <a href="shop.html?category=Toys for Him">Toys for Him</a>
+            </div>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a href="#" class="dropbtn">Specialty Toys ▾</a>
+            <div class="dropdown-content">
+                <a href="shop.html?category=Learn with Toys">Learn with Toys</a>
+                <a href="shop.html?category=Toddler Essentials">Toddler Essentials</a>
+                <a href="shop.html?category=Toys for Special Needs">Toys for Special Needs</a>
+                <a href="shop.html?category=Inclusive Play">Inclusive Play</a>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a href="#" id="quizBtn">Gift Wizard Quiz 🪄</a>
+        </li>
+
+        <li class="nav-item">
+            <a href="shop.html?category=All">Shop All Toys</a>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a href="#" class="dropbtn" style="color: var(--brand-orange);">Deals & Magic ✨ ▾</a>
+            <div class="dropdown-content">
+                <a href="#">Claim Your Coupons</a>
+                <a href="shop.html?q=clearance">Clearance Sale</a>
+                <a href="shop.html?q=promotion">Weekly Promotions</a>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a href="shop.html?q=new">New Arrivals</a>
+        </li>
+    </ul>
+</nav>
+
+    <header class="bg-light py-5 mt-5">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold" style="color: #000;">YOUR CART</h1>
+        </div>
+    </header>
+
+    <div class="container my-5" style="min-height: 400px;">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Cart Header -->
+                <div class="cart-header d-none d-md-flex mb-3">
+                    <div class="col-5"><strong>PRODUCT</strong></div>
+                    <div class="col-2 text-center"><strong>PRICE</strong></div>
+                    <div class="col-2 text-center"><strong>QUANTITY</strong></div>
+                    <div class="col-2 text-center"><strong>TOTAL</strong></div>
+                    <div class="col-1"></div>
+                </div>
+
+                <!-- Cart Items Container -->
+                <div id="cartItemsContainer">
+                    <!-- Items will be dynamically inserted here -->
+                </div>
+
+                <!-- Empty Cart Message -->
+                <div id="emptyCartMessage" class="text-center py-5" style="display: none;">
+                    <img src="assets/img/logo2.png" alt="Empty Cart" style="height: 100px; opacity: 0.3;">
+                    <h4 class="mt-3 text-muted">Your cart is empty</h4>
+                    <a href="shop.html" class="btn btn-primary mt-3">Continue Shopping</a>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm p-4">
+                    <h5 class="fw-bold mb-4" style="font-size: 1.5rem;">ORDER SUMMARY</h5>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <span style="font-size: 1.1rem;">Subtotal</span>
+                        <span id="cartSubtotal" style="font-size: 1.3rem; font-weight: 600;">Rs.0.00</span>
+                    </div>
+                    
+                    
+                    <hr class="my-3">
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                        <span style="font-size: 1.2rem; font-weight: 600;">TOTAL:</span>
+                        <span id="cartTotal" style="font-size: 1.5rem; font-weight: 700;">Rs.0.00</span>
+                    </div>
+                    
+                    <button class="btn btn-dark w-100 py-3 mb-3" style="font-weight: 600; border-radius: 0;" onclick="location.href='checkout.html'">
+                        Proceed To Checkout
+                    </button>
+                    <button class="btn btn-warning w-100 py-3" style="font-weight: 600; border-radius: 0;" onclick="location.href='shop.html'">
+                        Continue Shopping
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ <footer class="footer-main">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>Customer Service</h3>
+            <ul>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Shipping & Returns</a></li>
+                <li><a href="#">Track Order</a></li>
+                <li><a href="#">FAQs</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>About Wonderland</h3>
+            <ul>
+                <li><a href="#">Our Story</a></li>
+                <li><a href="#">Store Locator</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Newsletter</h3>
+            <p>Get magic delivered to your inbox!</p>
+            <form class="footer-newsletter">
+                <input type="email" placeholder="Your Email">
+                <button type="submit">Join</button>
+            </form>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Wonderland Toystore. All Rights Reserved.</p>
+    </div>
+</footer>
+
+    <script src="assets/js/cart-script.js"></script>
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

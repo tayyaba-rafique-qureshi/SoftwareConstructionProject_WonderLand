@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel | Wonderland Toystore</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/admin-style.css">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .user-actions a {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: inline-block;
+        }
+        .user-actions a:hover { background: var(--brand-orange); }
+        .pagination-container {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 20px; padding: 10px; background: #f8f9fa; border-radius: 8px;
+        }
+        .page-btn {
+            padding: 8px 16px; background: var(--brand-rust); color: white;
+            border: none; border-radius: 20px; cursor: pointer; font-weight: bold;
+        }
+        .page-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .admin-filter {
+            padding: 10px; border-radius: 20px; border: 1px solid #ddd;
+            width: 250px; margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+   <header class="header-main">
+        <a href="admin.html" class="logo"><img src="assets/img/logo2.png" alt="Logo" style="height: 85px;"></a>
+        
+       <nav style="display: flex; gap: 20px; align-items: center;">
+            <a href="#" onclick="showTab('analytics'); return false;" id="analyticsTab" class="admin-nav-link">📊 Analytics</a>
+            <a href="#" onclick="showTab('inventory'); return false;" id="inventoryTab" class="admin-nav-link">📦 Inventory</a>
+            <a href="#" onclick="showTab('orders'); return false;" id="ordersTab" class="admin-nav-link">🛍️ Orders</a>
+            <a href="#" onclick="showTab('marketing'); return false;" id="marketingTab" class="admin-nav-link">📢 Marketing</a>
+        </nav>
+        
+        <div class="user-actions">
+            <a href="#" id="loginBtn">Hello, Sign In 👤</a>
+            <a href="#" id="accountBtn" style="display: none;">Hello, <span id="displayUsername">Account</span> 👤</a>
+        </div>
+    </header>
+
+    <section id="analyticsSection" class="content-section active">
+            <h2 class="mb-4">Dashboard Overview</h2>
+            <div class="stats-grid mb-5">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e1f5fe; color: #0288d1;">💰</div>
+                    <div class="stat-info">
+                        <h3>Total Revenue</h3>
+                        <p id="totalRevenue">Rs 0.00</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e8f5e9; color: #2e7d32;">🛒</div>
+                    <div class="stat-info">
+                        <h3>Total Orders</h3>
+                        <p id="totalOrders">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #f3e5f5; color: #8e24aa;">📦</div>
+                    <div class="stat-info">
+                        <h3>Items Sold</h3>
+                        <p id="totalItemsSold">0</p> 
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fff3e0; color: #ef6c00;">⏳</div>
+                    <div class="stat-info">
+                        <h3>Pending Orders</h3>
+                        <p id="pendingOrders">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #ffebee; color: #c62828;">⚠️</div>
+                    <div class="stat-info">
+                        <h3>Low Stock Items</h3>
+                        <p id="lowStockCount">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">📈 Revenue Trend (Last 7 Days)</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card shadow-sm">
+                         <div class="card-header bg-white">
+                            <h5 class="mb-0">📦 Order Status Distribution</h5>
+                        </div>
+                        <div class="card-body">
+                             <div style="width: 60%; margin: auto;">
+                                <canvas id="statusChart"></canvas>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">🔥 Hot Sellers</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul id="hotSellersList" class="list-group list-group-flush">
+                                <li class="list-group-item text-center text-muted p-4">Loading...</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <div id="inventorySection" class="container admin-section" style="min-height: 70vh; padding: 40px 20px; display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--brand-red); padding-bottom: 10px;">
+            <h1>Inventory Management</h1>
+            <button class="btn-login" onclick="openAddModal()" style="margin: 0; padding: 10px 20px; background: var(--brand-orange);">+ Add New Toy</button>
+        </div>
+        
+        <div style="margin-bottom: 15px; display: flex; align-items: center;">
+            <label style="font-weight: bold; margin-right: 10px;">Filter by Category:</label>
+            <select id="adminCategoryFilter" class="admin-filter" onchange="changeCategory()">
+                <option value="All">All Categories</option>
+                <option value="Action Toys & Figures">Action Toys & Figures</option>
+                <option value="Lego & Bricks">Lego & Bricks</option>
+                <option value="Plush & Stuffed Toys">Plush & Stuffed Toys</option>
+                <option value="Learn with Toys">Learn with Toys</option>
+                <option value="Toddler Essentials">Toddler Essentials</option>
+                <option value="Toys for Her">Toys for Her</option>
+                <option value="Toys for Him">Toys for Him</option>
+                <option value="Video Games">Video Games</option>
+            </select>
+            <span id="loadingSpinner" style="display:none; color: var(--brand-rust); margin-left: 10px;">Loading...</span>
+        </div>
+        
+        <table class="table" style="width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <thead style="background: #eee;">
+                <tr>
+                    <th>Image</th>
+                    <th>Toy Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="inventory-table-body"></tbody>
+        </table>
+
+        <div class="pagination-container">
+            <button id="prevBtn" class="page-btn" onclick="changePage(-1)">&#8592; Previous</button>
+            <span id="pageInfo">Page 1 of 1</span>
+            <button id="nextBtn" class="page-btn" onclick="changePage(1)">Next &#8594;</button>
+        </div>
+    </div>
+
+    <div id="ordersSection" class="container admin-section" style="min-height: 70vh; padding: 40px 20px; display: block;">
+        <h1 style="border-bottom: 2px solid var(--brand-red); padding-bottom: 10px; margin-bottom: 30px;">Manage Orders</h1>
+        
+        <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 300px;">
+                <label style="font-weight: bold; white-space: nowrap;">Search Order:</label>
+                <input type="text" id="orderSearchInput" placeholder="Enter Order ID (e.g., 12345)" class="admin-filter" style="flex: 1;" onkeypress="if(event.key === 'Enter') searchOrders()">
+                <button class="page-btn" onclick="searchOrders()" style="margin: 0; padding: 8px 20px;">🔍 Search</button>
+                <button class="page-btn" onclick="clearOrderSearch()" style="margin: 0; padding: 8px 20px; background: #95a5a6;">Clear</button>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <label style="font-weight: bold;">Filter by Status:</label>
+                <select id="orderStatusFilter" class="admin-filter" onchange="filterOrders()">
+                    <option value="All">All Orders</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="PROCESSING">Processing</option>
+                    <option value="SHIPPED">Shipped</option>
+                    <option value="DELIVERED">Delivered</option>
+                    <option value="CANCELLED">Cancelled</option>
+                </select>
+                <button class="page-btn" onclick="exportToCSV()" style="margin: 0; padding: 8px 20px; background: #27ae60;">📥 Export to CSV</button>
+            </div>
+        </div>
+
+        <table class="table" style="width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <thead style="background: #eee;">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="orders-table-body">
+                <tr><td colspan="7" style="text-align:center; padding:20px;">Loading orders...</td></tr>
+            </tbody>
+        </table>
+    </div>
+   
+    <div id="marketingSection" class="container admin-section" style="min-height: 70vh; padding: 40px 20px; display: none;">
+        <h1 style="border-bottom: 2px solid var(--brand-red); padding-bottom: 10px; margin-bottom: 30px;">Marketing & Promotions</h1>
+        <div class="row" style="display: flex; gap: 20px;">
+            <div style="flex: 1; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h3 style="color: var(--brand-rust);">🔥 Start Flash Sale</h3>
+                <p class="text-muted">Apply discounts to a category and email all subscribers.</p>
+                <hr>
+                <form onsubmit="startSale(event)">
+                    <div class="mb-3" style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 5px;">Target Category</label>
+                        <select id="saleCategory" class="admin-filter" style="width: 100%;">
+                            <option value="All">All Categories</option>
+                            <option value="Action Toys & Figures">Action Toys & Figures</option>
+                            <option value="Lego & Bricks">Lego & Bricks</option>
+                            <option value="Plush & Stuffed Toys">Plush & Stuffed Toys</option>
+                            <option value="Video Games">Video Games</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 5px;">Discount Percentage (%)</label>
+                        <input type="number" id="saleDiscount" class="admin-filter" style="width: 100%;" min="1" max="90" placeholder="e.g. 20" required>
+                    </div>
+                    <button type="submit" class="btn-login" style="width: 100%; background: var(--brand-rust);">🚀 Launch Sale</button>
+                </form>
+            </div>
+
+            <div style="flex: 1; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h3 style="color: #27ae60;">🎟️ Create Coupon</h3>
+                <p class="text-muted">Generate a discount code and email it to subscribers.</p>
+                <hr>
+                <form onsubmit="createCoupon(event)">
+                    <div class="mb-3" style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 5px;">Coupon Code</label>
+                        <input type="text" id="couponCode" class="admin-filter" style="width: 100%;" placeholder="e.g. SUMMER50" required>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <div style="flex: 1;">
+                            <label style="font-weight: bold; display: block; margin-bottom: 5px;">Discount (%)</label>
+                            <input type="number" id="couponDiscount" class="admin-filter" style="width: 100%;" min="1" max="100" placeholder="10" required>
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="font-weight: bold; display: block; margin-bottom: 5px;">Expiry Date</label>
+                            <input type="date" id="couponExpiry" class="admin-filter" style="width: 100%;" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-login" style="width: 100%; background: #27ae60;">✉️ Create & Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginSidebar" class="admin-popup" style="display:none;">
+        <div class="drawer-header"><h2>Sign In</h2><span class="close-btn" onclick="closeLogin()">&times;</span></div>
+    </div>
+
+    <div id="accountSidebar" class="admin-popup" style="display:none;">
+        <div class="drawer-header">
+            <h2>Admin Account 👤</h2>
+            <span class="close-btn" onclick="closeAccount()">&times;</span>
+        </div>
+        <div class="account-info" style="padding: 20px;">
+            <div style="text-align:center; margin-bottom:20px;">
+                <img src="assets/img/logo2.png" style="height:60px; border-radius:50%; background:#eee;">
+                <h3 id="acc-name">Admin</h3>
+                <p id="acc-email" class="text-muted">admin@wonderland.com</p>
+            </div>
+            <ul style="list-style:none; padding:0;">
+                <li style="padding:15px 0; border-bottom:1px solid #eee;">
+                    <a href="#" onclick="openChangePassModal()" style="text-decoration:none; color:inherit;">🔐 Change Password</a>
+                </li>
+                <li style="padding:15px 0; border-bottom:1px solid #eee;">
+                    <button onclick="handleLogout()" style="background:none; border:none; color: var(--brand-red); font-weight:bold; cursor:pointer; font-size:1rem;">🚪 Logout</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="toyModal" class="overlay" onclick="closeToyModal()">
+        <div id="toyDrawer" class="admin-popup" onclick="event.stopPropagation()">
+            <div class="drawer-header"><h2 id="modalTitle">Add New Toy</h2><span class="close-btn" onclick="closeToyModal()">&times;</span></div>
+            <form id="toyForm" class="drawer-form">
+                <input type="hidden" id="toyId">
+                <label>Toy Name</label><input type="text" id="toyName" required class="form-control mb-2">
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;"><label>Brand</label><input type="text" id="toyBrand" required class="form-control mb-2"></div>
+                    <div style="flex: 1;"><label>Category</label>
+                        <select id="toyCategory" class="form-control mb-2">
+                            <option value="Action Toys & Figures">Action Toys</option>
+                            <option value="Lego & Bricks">Lego</option>
+                            <option value="Plush & Stuffed Toys">Plush & Stuffed</option>
+                            <option value="Learn with Toys">Learning</option>
+                            <option value="Toddler Essentials">Toddler</option>
+                            <option value="Toys for Her">Girls</option>
+                            <option value="Toys for Him">Boys</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;"><label>Price ($)</label><input type="number" step="0.01" id="toyPrice" required class="form-control mb-2"></div>
+                    <div style="flex: 1;"><label>Stock Qty</label><input type="number" id="toyStock" required class="form-control mb-2"></div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;"><label>Min Age</label><input type="number" id="toyMinAge" required class="form-control mb-2"></div>
+                    <div style="flex: 1;"><label>Target Audience</label><input type="text" id="toyAudience" class="form-control mb-2"></div>
+                </div>
+                <label>Description</label><textarea id="toyDescription" rows="3" class="form-control mb-2"></textarea>
+                <div id="imageUploadGroup"><label>Upload Image</label><input type="file" id="toyImageFile" accept="image/*" class="form-control mb-2"></div>
+                <button type="submit" class="btn-login" style="width: 100%; margin-top: 20px;">Save Magic ✨</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="restockModal" class="overlay" onclick="closeRestockModal()">
+        <div id="restockDrawer" class="admin-popup" onclick="event.stopPropagation()" style="width: 400px;">
+            <div class="drawer-header"><h2>Restock Toy</h2><span class="close-btn" onclick="closeRestockModal()">&times;</span></div>
+            <form id="restockForm" class="drawer-form">
+                <input type="hidden" id="restockId">
+                <label>Enter Quantity to Add</label><input type="number" id="restockQty" required min="1" class="form-control mb-3">
+                <button type="submit" class="btn-login" style="width: 100%; margin-top: 20px;">Add to Stock</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="orderDetailsModal" class="overlay" onclick="closeOrderDetailsModal()">
+        <div class="admin-popup" onclick="event.stopPropagation()">
+            <div class="drawer-header">
+                <h2>Order Details #<span id="orderDetailId">---</span></h2>
+                <span class="close-btn" onclick="closeOrderDetailsModal()">&times;</span>
+            </div>
+            <div style="padding: 20px 0;">
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h4 style="color: var(--brand-rust); margin-bottom: 10px;">👤 Customer Information</h4>
+                    <p><strong>Name:</strong> <span id="orderCustomerName">---</span></p>
+                    <p><strong>Email:</strong> <span id="orderCustomerEmail">---</span></p>
+                    <p><strong>Phone:</strong> <span id="orderCustomerPhone">---</span></p>
+                    <p><strong>Address:</strong> <span id="orderCustomerAddress">---</span></p>
+                    <p><strong>City:</strong> <span id="orderCustomerCity">---</span> | <strong>Country:</strong> <span id="orderCustomerCountry">---</span></p>
+                </div>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h4 style="color: var(--brand-rust); margin-bottom: 10px;">📦 Order Information</h4>
+                    <p><strong>Order Date:</strong> <span id="orderDate">---</span></p>
+                    <p><strong>Status:</strong> <span id="orderStatus" class="badge">---</span></p>
+                    <p><strong>Payment Method:</strong> <span id="orderPaymentMethod">---</span></p>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: var(--brand-rust); margin-bottom: 10px;">🛍️ Order Items</h4>
+                    <table class="table" style="width: 100%; border-collapse: collapse; background: white;">
+                        <thead style="background: #eee;">
+                            <tr>
+                                <th>Item</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderItemsBody">
+                            <tr><td colspan="4" style="text-align:center;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                    <h4 style="color: var(--brand-rust); margin-bottom: 10px;">💰 Order Summary</h4>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Subtotal:</span>
+                        <span id="orderSubtotal">Rs 0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Shipping:</span>
+                        <span id="orderShipping">Rs 0.00</span>
+                    </div>
+                    <hr style="margin: 10px 0;">
+                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold;">
+                        <span>Total:</span>
+                        <span id="orderTotal" style="color: var(--brand-rust);">Rs 0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay" class="overlay" onclick="closeAllDrawers()"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/admin-script.js"></script>
+</body>
+</html>
