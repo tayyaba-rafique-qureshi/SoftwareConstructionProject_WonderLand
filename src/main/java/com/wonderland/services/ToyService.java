@@ -85,11 +85,12 @@ public class ToyService {
             params.add(query);
         }
 
-        if (category != null && !category.isEmpty() && !category.equalsIgnoreCase("All")) {
-            sql.append(" AND category = ?");
-            params.add(category);
-        }
-
+       // Inside ToyService.java -> getToysPaginated method
+if (category != null && !category.isEmpty() && !category.equalsIgnoreCase("All")) {
+    // Robust check: Trim and ignore case to handle %20 or spacing differences 
+    sql.append(" AND LOWER(TRIM(category)) = LOWER(TRIM(?))");
+    params.add(category);
+}
         if (ageGroup != null && !ageGroup.isEmpty()) {
             switch (ageGroup) {
                 case "0-2": sql.append(" AND min_age <= 2"); break;
@@ -123,10 +124,11 @@ public class ToyService {
             params.add(query);
         }
 
-        if (category != null && !category.isEmpty() && !category.equalsIgnoreCase("All")) {
-            sql.append(" AND category = ?");
-            params.add(category);
-        }
+      // Inside ToyService.java -> countToys method
+if (category != null && !category.isEmpty() && !category.equalsIgnoreCase("All")) {
+    sql.append(" AND LOWER(TRIM(category)) = LOWER(TRIM(?))");
+    params.add(category);
+}
 
         if (ageGroup != null && !ageGroup.isEmpty()) {
             switch (ageGroup) {
