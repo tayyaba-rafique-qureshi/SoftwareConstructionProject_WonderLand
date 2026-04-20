@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<!--
+    TestNG Suite Configuration for Wonderland Toystore Selenium Tests
+
+    This suite executes MM-Path based integration tests using Selenium WebDriver
+    Tests are executed in priority order to maintain data dependencies
+
+    Execution: mvn test -DsuiteXmlFile=testng.xml
+-->
+<suite name="Wonderland Toystore Selenium Test Suite" verbose="1">
+
+    <test name="MM-Path Integration Tests" preserve-order="true">
+        <classes>
+            <class name="com.wonderland.selenium.WonderlandSeleniumTests">
+                <methods>
+                    <include name="testUserRegistration"/>
+                    <include name="testUserLogin"/>
+                    <include name="testAddItemToCart"/>
+                    <include name="testApplyCoupon"/>
+                    <include name="testCheckoutProcess"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>

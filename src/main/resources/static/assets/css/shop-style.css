@@ -1,9 +1,14 @@
 /* --- Global Variables (Safety Fallback) --- */
 :root {
-    --brand-rust: #c0392b;   /* Deep Red */
-    --brand-red: #e74c3c;    /* Bright Red */
-    --brand-orange: #e67e22; /* Orange */
+  
     --brand-dark: #2c3e50;   /* Dark Blue/Grey */
+
+     --brand-rust:   #C04000;
+    --brand-red:    #e02727;
+       --brand-orange: #FFD700;
+    --brand-peach:  #FFDAB9;
+    --brand-brown:  #8B4513;
+    --white: #ffffff;
 }
 
 /* --- Filter Sidebar --- */
@@ -158,4 +163,45 @@
 
 .btn-add-cart:hover {
     background: var(--brand-rust);
+}
+
+/* Bubbly Card Style consistent with shop.html */
+.shadow-bubbly {
+    border: none !important;
+    border-radius: 25px !important; /* Matches toy-card in shop-style.css */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: white;
+}
+
+.shadow-bubbly:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Stat Cards Update */
+.stat-card {
+    padding: 25px !important;
+    display: flex;
+    align-items: center;
+}
+
+.stat-icon {
+    width: 65px !important;
+    height: 65px !important;
+    border-radius: 20px !important; /* Bubbly square-round */
+    font-size: 2rem !important;
+}
+
+/* Bubbly List Items */
+.bubbly-list .list-group-item {
+    border-radius: 15px !important;
+    margin-bottom: 8px;
+    border: 1px solid #f8f9fa !important;
+    background: #fdfdfd;
+    transition: background 0.2s;
+}
+
+.bubbly-list .list-group-item:hover {
+    background: var(--brand-peach);
 }

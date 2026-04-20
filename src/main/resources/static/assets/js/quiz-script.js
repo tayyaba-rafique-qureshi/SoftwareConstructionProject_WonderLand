@@ -2,8 +2,8 @@
 
 let step = 0;
 let answers = {
-    ageGroup: "3-5", // Default
-    budget: 5000, 
+    ageGroup: "",
+    budget: "",
     interest: ""
 };
 
@@ -76,6 +76,7 @@ function selectOption(key, value, btnElement) {
     document.querySelectorAll(".quiz-option").forEach(el => el.classList.remove("selected"));
     btnElement.classList.add("selected");
     document.getElementById("nextBtn").disabled = false;
+
 }
 
 async function nextStep() {
@@ -104,7 +105,7 @@ async function nextStep() {
             alert("Could not load categories.");
         } finally {
             nextBtn.innerText = "Next ➜";
-            nextBtn.disabled = false; 
+            nextBtn.disabled = false;
         }
         return;
     }

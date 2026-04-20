@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 1. Handle Search Query
     const searchQuery = params.get('q') || params.get('search');
+  //  const searchQuery = null; // 🔥 SEEDED FAULT: App forgets the search query
     if (searchQuery && searchInput) {
         searchInput.value = searchQuery;
     } else if (searchInput) {
